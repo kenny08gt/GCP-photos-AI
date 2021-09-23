@@ -128,7 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-app/past-time-machine-dev-live-ca8d0925e601.json
+app/backend/past-time-machine-dev-live-ca8d0925e601.json
 .DS_STORE
 .idea/*
 .vscode/
