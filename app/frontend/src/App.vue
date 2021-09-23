@@ -5,12 +5,12 @@
 
   <div id="nav">
     <router-link to="/">Home</router-link> |
-    <router-link to="/galery">Galery</router-link> |
+    <router-link to="/gallery">Gallery</router-link> |
     <router-link to="/upload">Upload</router-link> |
     <router-link to="/search">Search</router-link> |
     <router-link to="/about">About</router-link>
   </div>
-  <router-view/>
+  <router-view />
 </template>
 
 <style>

@@ -30,6 +30,7 @@ def root():
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
     successful_upload = False
+    url = ""
     if request.method == "POST":
         uploaded_file = request.files.get("image")
 
@@ -44,11 +45,12 @@ def upload():
                 uploaded_file.read(), content_type=uploaded_file.content_type
             )
 
+            url = blob.public_url
             logging.info(blob.public_url)
 
             successful_upload = True
 
-    return {"success": successful_upload}
+    return {"success": successful_upload, "url": url}
 
 
 @app.route("/images", methods=["GET"])
@@ -85,6 +87,22 @@ def search():
             pass
 
     return {"results": results, "query": query}
+
+
+@app.route("/tags")
+def tags():
+    results = []
+
+    db = firestore.Client()
+    docs = db.collection(u"tags").stream()
+
+    try:
+        for doc in docs:
+            results.append(doc.id)
+    except TypeError as e:
+        pass
+
+    return {"results": results}
 
 
 @app.errorhandler(500)

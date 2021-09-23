@@ -16,8 +16,8 @@ const routes = [
     component: Upload,
   },
   {
-    path: '/galery',
-    name: 'Galery',
+    path: '/gallery',
+    name: 'Gallery',
     component: Galery,
   },
   {

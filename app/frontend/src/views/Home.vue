@@ -7,7 +7,7 @@
         <button @click="$router.push('/upload')">Subir imagen
           <span class="ml-2 material-icons blue">file_upload</span>
         </button>
-        <button @click="$router.push('/galery')">Galeria
+        <button @click="$router.push('/gallery')">Galeria
           <span class="ml-2 material-icons blue">perm_media</span></button>
         <button @click="$router.push('/search')">Buscar
           <span class="ml-2 material-icons blue">search</span></button>
