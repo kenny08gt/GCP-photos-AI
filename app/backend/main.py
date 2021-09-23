@@ -6,12 +6,13 @@ import google.cloud.logging
 from google.cloud import firestore
 from google.cloud import storage
 from flask_cors import CORS, cross_origin
+from PredictImage import predict_image_classification_sample
 
-import os
+# import os
 
-os.environ[
-    "GOOGLE_APPLICATION_CREDENTIALS"
-] = "./past-time-machine-dev-live-ca8d0925e601.json"
+# os.environ[
+#     "GOOGLE_APPLICATION_CREDENTIALS"
+# ] = "./past-time-machine-dev-live-ca8d0925e601.json"
 
 client = google.cloud.logging.Client()
 client.get_default_handler()
@@ -31,6 +32,8 @@ def root():
 def upload():
     successful_upload = False
     url = ""
+    predictedName = ""
+    predictedConfidence = 0
     if request.method == "POST":
         uploaded_file = request.files.get("image")
 
@@ -46,11 +49,32 @@ def upload():
             )
 
             url = blob.public_url
+
+            predictions = predict_image_classification_sample(
+                project="824650660486",
+                endpoint_id="5346599590432866304",
+                location="us-central1",
+                filename=url,
+            )
+
             logging.info(blob.public_url)
 
             successful_upload = True
 
-    return {"success": successful_upload, "url": url}
+            for prediction in predictions:
+                prediction = dict(prediction)
+                print(prediction)
+                predictedName = prediction["displayNames"]
+                predictedConfidence = prediction["confidences"]
+                print(" prediction:", predictedName[0], predictedConfidence[0])
+                store_resutls(predictedName[0], url)
+
+    return {
+        "success": successful_upload,
+        "url": url,
+        "predictions": predictedConfidence[0],
+        "predictionName": predictedName[0],
+    }
 
 
 @app.route("/images", methods=["GET"])
@@ -109,6 +133,18 @@ def tags():
 def server_error(e):
     logging.exception("An error occurred during a request.")
     return render_template("error.html"), 500
+
+
+def store_resutls(tag, file_name):
+    gcs = storage.Client()
+    bucket = gcs.get_bucket(
+        os.environ.get("BUCKET", "past-time-machine-dev-live-bucket-01")
+    )
+    db = firestore.Client()
+    db.collection(u"tags").document(tag.lower()).set(
+        {u"photo_urls": firestore.ArrayUnion([file_name])},
+        merge=True,
+    )
 
 
 if __name__ == "__main__":

@@ -26,15 +26,14 @@ small {
   height: auto;
   width: auto;
   transition: transform 0.2s;
-
 }
 .img-wrapper:hover {
   transform: scale(1.01);
 }
 .img-wrapper img {
-    box-shadow: 0 3px 4px 0 rgb(0 0 0 / 20%), 0 3px 3px -2px rgb(0 0 0 / 14%),
+  box-shadow: 0 3px 4px 0 rgb(0 0 0 / 20%), 0 3px 3px -2px rgb(0 0 0 / 14%),
     0 1px 8px 0 rgb(0 0 0 / 12%);
-    border-radius: 4px;
+  border-radius: 4px;
 }
 </style>
 <template>
@@ -52,7 +51,15 @@ small {
         </form>
         <div>
           <p class="mt-2 text-sm mb-2">Podrías probar una de las siguientes</p>
-          <small v-for="(tag, key) in tags" :key="key" @click="searchTag(tag)">{{ tag }}</small>
+          <div>
+            <small
+              v-for="(tag, key) in tags"
+              :key="key"
+              @click="searchTag(tag)"
+              class="inline-block mb-2"
+              >{{ tag }}</small
+            >
+          </div>
         </div>
       </div>
       <div v-if="searching" class="pt-8">
@@ -114,8 +121,8 @@ export default {
     },
     getTags() {
       axios
-        // .get('http://34.135.14.66/tags')
-        .get('http://localhost:5000/tags')
+        .get('http://34.135.14.66/tags')
+        // .get('http://localhost:5000/tags')
         .then((response) => {
           this.tags = response.data.results;
         })

@@ -73,8 +73,8 @@ export default {
       formData.append('image', files[0]);
       isUploading.value = true;
       axios
-        // .post('http://34.135.14.66/upload', formData, {
-        .post('http://localhost:5000/upload', formData, {
+        .post('http://34.135.14.66/upload', formData, {
+        // .post('http://localhost:5000/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Accept: 'application/json',
